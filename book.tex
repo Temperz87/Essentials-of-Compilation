@@ -4116,18 +4116,6 @@ the \code{main} function with a prelude and conclusion wrapped around
 the rest of the program, as shown in figure~\ref{fig:p1-x86} and
 discussed in section~\ref{sec:x86}.
 
-When running on Mac OS X, your compiler should prefix an underscore to
-all labels (for example, changing \key{main} to \key{\_main}).
-%
-\racket{The Racket call \code{(system-type 'os)} is useful for
-  determining which operating system the compiler is running on. It
-  returns \code{'macosx}, \code{'unix}, or \code{'windows}.}
-%
-\python{The Python \code{platform.system} 
-  function returns \code{\textquotesingle Linux\textquotesingle},
-  \code{\textquotesingle Windows\textquotesingle}, or
-  \code{\textquotesingle Darwin\textquotesingle} (for Mac).}
-
 \begin{exercise}\normalfont\normalsize
 %
 Implement the \key{prelude\_and\_conclusion} pass in
