@@ -23,7 +23,7 @@
 
 \def\racketEd{0}
 \def\pythonEd{1}
-\def\edition{0}
+\def\edition{1}
 
 % material that is specific to the Racket edition of the book
 \newcommand{\racket}[1]{{\if\edition\racketEd{#1}\fi}}
@@ -1666,11 +1666,11 @@ Figure~\ref{fig:pe-arith} gives the code for a simple partial
 evaluator for the \LangInt{} language. The output of the partial evaluator
 is a program in \LangInt{}. In figure~\ref{fig:pe-arith}, the structural
 recursion over $\Exp$ is captured in the \code{pe\_exp} function,
-whereas the code for partially evaluating the negation and addition
-operations is factored into three auxiliary functions:
-\code{pe\_neg}, \code{pe\_add} and \code{pe\_sub}. The input to these 
+whereas the code for partially evaluating the negation, addition,
+and subtraction operations is factored into two auxiliary functions:
+\code{pe\_neg} and \code{pe\_add}. The input to these 
 functions is the output of partially evaluating the children.
-The \code{pe\_neg}, \code{pe\_add} and \code{pe\_sub} functions check whether their
+The \code{pe\_neg} and \code{pe\_add} functions check whether their
 arguments are integers and if they are, perform the appropriate
 arithmetic. Otherwise, they create an AST node for the arithmetic
 operation.
@@ -1689,18 +1689,13 @@ operation.
     [((Int n1) (Int n2)) (Int (fx+ n1 n2))]
     [(_ _) (Prim '+ (list r1 r2))]))
 
-(define (pe_sub r1 r2)
-  (match* (r1 r2)
-    [((Int n1) (Int n2)) (Int (fx- n1 n2))]
-    [(_ _) (Prim '- (list r1 r2))]))
-
 (define (pe_exp e)
   (match e
     [(Int n) (Int n)]
     [(Prim 'read '()) (Prim 'read '())]
     [(Prim '- (list e1)) (pe_neg (pe_exp e1))]
     [(Prim '+ (list e1 e2)) (pe_add (pe_exp e1) (pe_exp e2))]
-    [(Prim '- (list e1 e2)) (pe_sub (pe_exp e1) (pe_exp e2))]))
+    [(Prim '- (list e1 e2)) (pe_add (pe_exp e1) (pe_neg (pe_exp e2)))]))
 
 (define (pe_Lint p)
   (match p
@@ -1723,19 +1718,12 @@ def pe_add(r1, r2):
     case _:
       return BinOp(r1, Add(), r2)
 
-def pe_sub(r1, r2):
-  match (r1, r2):
-    case (Constant(n1), Constant(n2)):
-      return Constant(sub64(n1, n2))
-    case _:
-      return BinOp(r1, Sub(), r2)
-      
 def pe_exp(e):
   match e:
     case BinOp(left, Add(), right):
       return pe_add(pe_exp(left), pe_exp(right))
     case BinOp(left, Sub(), right):
-      return pe_sub(pe_exp(left), pe_exp(right))
+      return pe_add(pe_exp(left), pe_neg(right))
     case UnaryOp(USub(), v):
       return pe_neg(pe_exp(v))
     case Constant(value):
@@ -4204,11 +4192,11 @@ arithmetic. For example, your partial evaluator should translate
 %
 To accomplish this, the \code{pe\_exp} function should produce output
 in the form of the $\itm{residual}$ nonterminal of the following
-grammar. The idea is that when processing an addition expression, we
-can always produce one of the following: (1) an integer constant, (2)
-an addition expression with an integer constant on the left-hand side
-but not the right-hand side, or (3) an addition expression in which
-neither subexpression is a constant.
+grammar. The idea is that when processing an addition or subtraction
+expression, we can always produce one of the following: (1) an integer
+constant, (2) an addition expression with an integer constant on the
+left-hand side but not the right-hand side, or (3) an addition
+expression in which neither subexpression is a constant.
 %
 {\if\edition\racketEd
 \[
