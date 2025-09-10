@@ -4206,10 +4206,10 @@ expression in which neither subexpression is a constant.
     \MID \LP\key{-} ~\Var\RP
     \MID \LP\key{-} ~\LP\key{read}\RP\RP
     \MID \LP\key{+} ~ \itm{inert} ~ \itm{inert}\RP\\
-    &\MID& \LP\key{let}~\LP\LS\Var~\itm{residual}\RS\RP~ \itm{residual} \RP \\  
-  \itm{residual} &::=& \Int
-    \MID \LP\key{+}~ \Int~ \itm{inert}\RP
-    \MID \itm{inert} 
+    &\MID& \LP\key{let}~\LP\LS\Var~\itm{rhs}\RS\RP~ \itm{residual} \RP \\  
+  \itm{rhs} &::=& \LP\key{+}~ \Int~ \itm{inert}\RP
+    \MID \itm{inert} \\
+  \itm{residual} &::=& \Int \MID \itm{rhs} 
 \end{array}
 \]
 \fi}
