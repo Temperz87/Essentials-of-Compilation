@@ -5321,7 +5321,7 @@ During liveness analysis we know which variables are call-live because
 we compute which variables are in use at every instruction
 (section~\ref{sec:liveness-analysis-Lvar}). When we build the
 interference graph (section~\ref{sec:build-interference}), we can
-place an edge in the interference graph between each call-live
+place an edge in the graph between each call-live
 variable and the caller-saved registers. This will prevent the graph
 coloring algorithm from assigning call-live variables to caller-saved
 registers.
