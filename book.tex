@@ -1723,7 +1723,7 @@ def pe_exp(e):
     case BinOp(left, Add(), right):
       return pe_add(pe_exp(left), pe_exp(right))
     case BinOp(left, Sub(), right):
-      return pe_add(pe_exp(left), pe_neg(right))
+      return pe_add(pe_exp(left), pe_neg(pe_exp(right)))
     case UnaryOp(USub(), v):
       return pe_neg(pe_exp(v))
     case Constant(value):
